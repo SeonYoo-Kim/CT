@@ -5,24 +5,21 @@ public class Main{
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		String A = sc.next();
-		String B = sc.next();
+		int A = sc.nextInt();
+		int B = sc.nextInt();
 
-		char[] a = A.toCharArray();
-		char[] b = B.toCharArray();
+		int a1 = A % 10;
+		int a2 = A / 10 % 10;
+		int a3 = A / 100;
+		int b1 = B % 10;
+		int b2 = B / 10 % 10;
+		int b3 = B / 100;
 
-		char tmpA = a[0];
-		char tmpB = b[0];
-		a[0] = a[2];
-		a[2] = tmpA;
-		b[0] = b[2];
-		b[2] = tmpB;
-
-		int resultA = 100 * (a[0]-'0') + 10 * (a[1]-'0') + (a[2]-'0');
-		int resultB = 100 * (b[0]-'0') + 10 * (b[1]-'0') + (b[2]-'0');
-
-		System.out.println(Math.max(resultA, resultB));
+		int reA = 100 * a1 + 10 * a2 + a3;
+		int reB = 100 * b1 + 10 * b2 + b3;
+		System.out.println(reA > reB ? reA : reB);
 
 	}
 
 }
+
