@@ -1,78 +1,81 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Solution{
+public class Solution {
 	static int winCnt, loseCnt, N = 9;
-	static int[] kyuyung, inyung;
+	static int[] kyu, in;
+	static boolean[] selected;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 		int T = Integer.parseInt(br.readLine());
 
 		for (int tc = 1; tc <= T; tc++) {
 			winCnt = 0;
 			loseCnt = 0;
-			kyuyung = new int[N];
-			inyung = new int[N];
-			boolean[] selected = new boolean[2 * N + 1];
 			StringTokenizer st = new StringTokenizer(br.readLine());
+
+			kyu = new int[N];
+			in = new int[N];
+			selected = new boolean[N * 2 + 1];
 			for (int i = 0; i < N; i++) {
-				kyuyung[i] = Integer.parseInt(st.nextToken());
-				selected[kyuyung[i]] = true;
-			} // System.out.println("규영이 : "+Arrays.toString(kyuyung));
+				kyu[i] = Integer.parseInt(st.nextToken());
+				selected[kyu[i]] = true;
+			}
 			int idx = 0;
-			for (int i = 1; i <= 2 * N; i++) {
+			for (int i = 1; i <= N * 2; i++) {
 				if (!selected[i])
-					inyung[idx++] = i;
-			} // System.out.println("인영이 : "+Arrays.toString(inyung));
-			Arrays.sort(inyung);
+					in[idx++] = i;
+			}
+//			System.out.println("규영 : "+Arrays.toString(kyu));
+//			System.out.println("인영 : "+Arrays.toString(in));
+			Arrays.sort(in);
 			do {
-				int kyuScore = 0, inScore = 0;
+				int kScore = 0, iScore = 0;
 				for (int i = 0; i < N; i++) {
-					if (inyung[i] < kyuyung[i]) {
-						kyuScore += inyung[i] + kyuyung[i];
-					} else
-						inScore += inyung[i] + kyuyung[i];
+					if (kyu[i] > in[i])
+						kScore += kyu[i] + in[i];
+					else
+						iScore += kyu[i] + in[i];
 				}
-				if (kyuScore > inScore)
+				if (kScore > iScore)
 					winCnt++;
 				else
 					loseCnt++;
-				// System.out.println("#" + winCnt + " " + loseCnt);
 			} while (np());
+
 			System.out.println("#" + tc + " " + winCnt + " " + loseCnt);
 		}
+
 	}
 
 	private static boolean np() {
-		int i = N - 1;
-		while (i >= 1 && inyung[i - 1] > inyung[i])
-			i--;
+		// System.out.println("in next permutation");
 
-		if (i == 0)
-			return false;
+		int i = N - 1;
+		while (i >= 1 && in[i - 1] > in[i]) i--;
+
+		if (i == 0) return false;
 
 		int j = N - 1;
-		while (inyung[i - 1] > inyung[j])
-			j--;
-
+		while (in[i - 1] > in[j]) j--;
+		//System.out.println(i + " " + j);
 		swap(i - 1, j);
 
 		int k = N - 1;
-		while (i < k) {
-			swap(i++, k--);
-		}
+		while (i < k) swap(i++, k--);
+
 		return true;
 	}
 
 	private static void swap(int i, int j) {
-		int temp = inyung[i];
-		inyung[i] = inyung[j];
-		inyung[j] = temp;
+		int temp = in[i];
+		in[i] = in[j];
+		in[j] = temp;
 	}
 
 }
