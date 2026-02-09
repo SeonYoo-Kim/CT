@@ -1,39 +1,29 @@
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-public class Main{
-	static int M, N, max = 0;
+public class Main {
+	static int N, M;
 	static int[] cards;
-	static int min = Integer.MAX_VALUE;
-	static int asw = 0;
-
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
-		M = sc.nextInt();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 		cards = new int[N];
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < N; i++) {
-			cards[i] = sc.nextInt();
-		} // System.out.println(Arrays.toString(cards));
-		select(0, 0, 0);
-		System.out.println(max);
-		
-		
+			cards[i] = Integer.parseInt(st.nextToken());
+		}
+		System.out.println(subset(0, 0, 0));
 	}
-
-	private static void select(int cnt, int sum, int index) {
-		if(sum > M) {
-			return;
-		}
-		if(cnt == 3) {
-			max = Math.max(max, sum);
-			return;
-		}
-		if(index == N) {
-			return;
-		}
-		select(cnt+1, sum+cards[index], index+1);
-		select(cnt, sum, index+1);
+	private static int subset(int idx, int cnt, int sum) {
+		if(sum > M)	return 0;
+		if(cnt == 3) return sum;
+		if(idx == N) return 0;
+		return Math.max(subset(idx+1, cnt+1, sum+cards[idx]), subset(idx+1, cnt, sum));
 	}
 
 }
