@@ -1,25 +1,28 @@
+
 import java.util.Scanner;
 
-public class Main{
+public class Main {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		String num = sc.nextLine().trim();
-		int n = Integer.parseInt(num);
-		int search = num.length() * 10;
+		int N = sc.nextInt();
+		String num = String.valueOf(N);
 
-		for (int i = n - search; i < n; i++) {
-			int test = i;
-			int sum = test;
-			while (test>0) {
-				sum += test%10;
-				test/=10;
+		for (int i = N - (num.length() * 10); i < N; i++) {
+			int tmp = i;
+			int sum = i;
+			while (tmp > 0) {
+				sum += (tmp % 10);
+				tmp /= 10;
 			}
-			if(sum == n) {
+			if(sum==N) {
 				System.out.println(i);
 				return;
 			}
-		}System.out.println(0);
+
+		}
+		System.out.println(0);
+
 	}
 
 }
