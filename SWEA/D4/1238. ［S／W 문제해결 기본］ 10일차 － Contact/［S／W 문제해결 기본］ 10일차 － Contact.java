@@ -1,7 +1,7 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,62 +11,52 @@ import java.util.StringTokenizer;
 public class Solution {
 
 	public static void main(String[] args) throws IOException {
-		StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
 		for (int tc = 1; tc <= 10; tc++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int len = Integer.parseInt(st.nextToken());		
+			int start = Integer.parseInt(st.nextToken());
 			
-
-			st.nextToken();
-			int N = (int) st.nval / 2;
-			
-			st.nextToken();
-			int start = (int) st.nval;
-			
-//			System.out.println(N + " " + start);
-			ArrayList<Integer>[] edges = new ArrayList[101];
+			ArrayList<Integer>[] call = new ArrayList[101];
 			int[] visited = new int[101];
-
-			for (int j = 0; j < N; j++) {
-				st.nextToken();
-				int from = (int) st.nval;
-				if(edges[from] == null)
-					edges[from] = new ArrayList<>();
-				st.nextToken();
-				edges[from].add((int) st.nval);
+			Arrays.fill(visited, -1);
+			for (int i = 0; i < call.length; i++) {
+				call[i] = new ArrayList<>();
 			}
-
-//			for(int i = 0; i < 101; i++) {
-//				if(edges[i] != null) {
-//					System.out.println(i);
-//					System.out.println(edges[i].toString());
-//				}
-//			}
-			Queue<Integer> q = new ArrayDeque<>();
-			q.offer(start);
-			visited[start] = 1;
 			
+			st = new StringTokenizer(br.readLine());
+			for (int i = 0; i < len/2; i++) {
+				call[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
+			}
+			
+			Queue<int[]> q = new ArrayDeque<>();
+			q.offer(new int[] {start, 0});
+			visited[start] = 0;
+
+			int dist = 0;
 			while(!q.isEmpty()) {
-				int cur = q.poll();
-				if(edges[cur] == null) continue;
-				for(Integer call : edges[cur]) {
-					if(visited[call] == 0) {
-						visited[call] = visited[cur] + 1;
-						q.offer(call);
-// 						System.out.println("offered : " + call);
+				int[] cur = q.poll();
+				int idx = cur[0];
+				dist = cur[1];
+				
+				for(int c : call[idx]) {
+					if(visited[c] == -1) {
+						visited[c] = dist + 1;
+						q.offer(new int[] {c, dist+1});
 					}
 				}
 			}
-			
-			int max = Integer.MIN_VALUE;
-			int idx = -1;
-			for (int i = 0; i < visited.length; i++) {
-				if(visited[i] >= max) {
-					max = visited[i];
-					idx = i;
-				}
-			}
-			System.out.println("#" + tc + " " + idx);
+			print(visited, dist, tc);
 		}
-
 	}
 
+	private static void print(int[] visited, int dist, int tc) {
+		for (int i = visited.length - 1; i > 0; i--) {
+			if(visited[i] == dist) {
+				System.out.println("#" + tc + " " + i);
+				return;
+			}
+		}
+	}
 }
