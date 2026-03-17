@@ -1,35 +1,43 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-
+	static int N, M, arr[];
+	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		int[] arr = new int[N];
-		
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		arr = new int[N];
 		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
+		for (int i = 0; i < N; i++) 
 			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		//System.out.println(Arrays.toString(arr));
-		int s, e, sum, cnt;
-		s = e = sum = cnt = 0;
+		
+		int start = 0, end = 0, sum = arr[end], cnt = 0;
+		
 		while(true) {
-			if(sum >= M) {
-				if (sum == M) cnt++;
-				sum -= arr[s++]; 
-			}else if(e == N) 
-				break;
-			else {
-				sum += arr[e++];
-			}
-		}System.out.println(cnt);
+//			System.out.println(start + " " + end);
+//			System.out.println(sum);
+		
+		    if (sum >= M) {
+		        if (sum == M) cnt++;
+		        sum -= arr[start++];
+		    } else {
+		        if (end == N - 1) break;
+		        sum += arr[++end];
+		    }
+								
+
+			
+		}
+		
+		
+		
+		System.out.println(cnt);
 	}
 
 }
