@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,26 +11,18 @@ public class Main{
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		int[] nums = new int[N];
-		int[] prefix = new int[N + 1];
-		prefix[0] = 0;
+		int[] arr = new int[N];
+		int[] prefix = new int[N+1];
 		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++)
-			nums[i] = Integer.parseInt(st.nextToken()); 
-		// System.out.println(Arrays.toString(nums));
-		for (int i = 1; i <= N; i++) {
-			prefix[i] = prefix[i-1] + nums[i-1];
-		}
-		// System.out.println(Arrays.toString(prefix));
-		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < N; i++) 
+			arr[i] = Integer.parseInt(st.nextToken());
+		for (int i = 1; i <= N; i++)
+			prefix[i] = prefix[i-1] + arr[i-1];
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int a = Integer.parseInt(st.nextToken()) - 1;
-			int b = Integer.parseInt(st.nextToken()) - 1;
-			sb.append(prefix[b] - prefix[a] + nums[b]).append("\n");
-			
-		}
-		System.out.println(sb);
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			System.out.println(prefix[b] - prefix[a] + arr[a-1]);		}
 	}
 
 }
