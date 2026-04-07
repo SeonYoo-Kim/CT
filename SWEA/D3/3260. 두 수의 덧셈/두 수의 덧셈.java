@@ -13,8 +13,9 @@ public class Solution {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			BigInteger a = new BigInteger(st.nextToken());
 			BigInteger b = new BigInteger(st.nextToken());
+			BigInteger sum = a.add(b);
 			
-			System.out.println("#" + tc + " " + a.add(b));
+			System.out.println("#" + tc + " " + sum);
 		}
 
 	}
