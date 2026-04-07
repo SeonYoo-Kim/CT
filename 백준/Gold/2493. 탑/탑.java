@@ -1,37 +1,31 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
-public class Main {
-	public static void main(String[] args) throws Exception {
+public class Main{
 
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-
 		int N = Integer.parseInt(br.readLine());
-		st = new StringTokenizer(br.readLine());
-
-		int[] result = new int[N];
-		Stack<int[]> stack = new Stack<>();
-
+		Stack<int[]> tower = new Stack<>();		
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
+		int max = 0;
 		for (int i = 0; i < N; i++) {
 			int height = Integer.parseInt(st.nextToken());
-
-			while (!stack.isEmpty() && stack.peek()[1] < height) {
-				stack.pop();
-			}
-
-			if (stack.isEmpty()) {
-				result[i] = 0;
-			} else {
-				result[i] = stack.peek()[0];
-			}
-
-			stack.push(new int[] { i + 1, height });
-		}
-
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < N; i++) {
-			sb.append(result[i]).append(" ");
+			
+			while(!tower.isEmpty() && tower.peek()[1] < height) 
+				tower.pop();
+			
+			
+			if(tower.isEmpty()) sb.append("0 ");
+			else sb.append(tower.peek()[0]).append(" ");
+			
+			tower.push(new int[] {i + 1, height});
+			
 		}
 		System.out.println(sb);
 	}
