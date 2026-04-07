@@ -1,51 +1,88 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Main {
-	public static void main(String[] args) throws IOException {
+public class Main{
 
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		
 		int S = Integer.parseInt(st.nextToken());
 		int P = Integer.parseInt(st.nextToken());
+		int[] cnt = {0, 0, 0, 0}; // ACGT
 		
-		char[] dna = br.readLine().toCharArray();
-		
+		char[] arr = br.readLine().toCharArray();
+		int[] req = new int[4]; // ACGT
 		st = new StringTokenizer(br.readLine());
-		int A = Integer.parseInt(st.nextToken());
-		int C = Integer.parseInt(st.nextToken());
-		int G = Integer.parseInt(st.nextToken());
-		int T = Integer.parseInt(st.nextToken());
-		
-		int[][] cond = new int[4][S + 1];
-		
-		for(int i = 1; i < S + 1; i++) {
-			cond[0][i] = cond[0][i-1];
-			cond[1][i] = cond[1][i-1];
-			cond[2][i] = cond[2][i-1];
-			cond[3][i] = cond[3][i-1];
-			if (dna[i - 1] == 'A') {
-				cond[0][i]++;
-			}else if (dna[i-1] == 'C') {
-				cond[1][i]++;
-			}else if (dna[i-1] == 'G') {
-				cond[2][i]++;
-			}else if (dna[i-1] == 'T') {
-				cond[3][i]++;
+		for (int i = 0; i < P; i++) {
+			switch (arr[i]) {
+			case 'A': {
+				cnt[0]++;
+				break;
+			}case 'C': {
+				cnt[1]++;
+				break;
+			}case 'G': {
+				cnt[2]++;
+				break;
+			}case 'T': {
+				cnt[3]++;
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + arr[i]);
 			}
 		}
-		int cnt = 0;
-		for (int i = 1; i <= S - P + 1; i++) {
-			if (
-				(cond[0][P - 1 + i] - cond[0][i-1] >= A) &&
-				(cond[1][P - 1 + i] - cond[1][i-1] >= C) &&
-				(cond[2][P - 1 + i] - cond[2][i-1] >= G) &&
-				(cond[3][P - 1 + i] - cond[3][i-1] >= T)
-			) cnt++;
+		for (int i = 0; i < 4; i++) 
+			req[i] = Integer.parseInt(st.nextToken());
+		int success = 0;
+		
+		if(req[0]<=cnt[0]&&req[1]<=cnt[1]&&req[2]<=cnt[2]&&req[3]<=cnt[3])
+			success++;
+		
+		for (int i = P; i < S; i++) {
+			
+			switch (arr[i-P]) {
+			case 'A': {
+				cnt[0]--;
+				break;
+			}case 'C': {
+				cnt[1]--;
+				break;
+			}case 'G': {
+				cnt[2]--;
+				break;
+			}case 'T': {
+				cnt[3]--;
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + arr[i]);
+			}
+			switch (arr[i]) {
+			case 'A': {
+				cnt[0]++;
+				break;
+			}case 'C': {
+				cnt[1]++;
+				break;
+			}case 'G': {
+				cnt[2]++;
+				break;
+			}case 'T': {
+				cnt[3]++;
+				break;
+			}
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + arr[i]);
+			}
+			if(req[0]<=cnt[0]&&req[1]<=cnt[1]&&req[2]<=cnt[2]&&req[3]<=cnt[3])
+				success++;
 		}
-		System.out.println(cnt);
+		System.out.println(success);
+
 	}
+
 }
