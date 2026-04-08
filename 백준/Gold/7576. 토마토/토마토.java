@@ -1,124 +1,61 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
 import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Queue;
+import java.util.StringTokenizer;
 
-public class Main {
+public class Main{
+	
+	static int[] dx = {0, 0, 1, -1};
+	static int[] dy = {1, -1, 0, 0};
 	static int[][] box;
-	static boolean[][] ripe;
-	static boolean impossible = false;
-	static int[] dx = { 0, 0, 1, -1 };
-	static int[] dy = { 1, -1, 0, 0 };
-	static int N, M, days = -1;
+	static int N, M;
 
 	public static void main(String[] args) throws IOException {
-		StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
-		st.nextToken();
-		M = (int) st.nval;
-		st.nextToken();
-		N = (int) st.nval;
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		M = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		ArrayDeque<int[]> tomato = new ArrayDeque<>();
 		box = new int[N][M];
-		ripe = new boolean[N][M];
-		int cnt = 0;
-
 		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < M; j++) {
-				st.nextToken();
-				box[i][j] = (int) st.nval;
-				if (box[i][j] == 1)
-					cnt++;
+				box[i][j] = Integer.parseInt(st.nextToken());
+				if(box[i][j] == 1)
+					tomato.add(new int[] {0, i, j});
 			}
-		}
-//		for (int[] a : box)
-//			System.out.println(Arrays.toString(a));
-
-		int[][] start = new int[cnt][2]; // x, y
-		int idx = 0;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				if (box[i][j] == 1) {
-					start[idx][0] = i;
-					start[idx][1] = j;
-					idx++;
-				}
-			}
-		}
-//		for(int[]a : start)
-//			System.out.println(Arrays.toString(a));
-
-		tomato(start);
-
-//		for (int i = 0; i < N; i++) {
-//			for (int j = 0; j < M; j++) {
-//				days = tomato(i, j, 1);
-//			}
-//		}
-//		int max = 0;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				if (box[i][j] == 0) impossible = true; 
-			}
-		}
-
-		System.out.println(impossible ? -1 : days);
-
-	}
-
-	private static void tomato(int[][] start) {
-		// System.out.println("inside of tomato");
-		Queue<int[]> q = new ArrayDeque<>();
-		for (int i = 0; i < start.length; i++) {
-			q.offer(start[i]);
-			ripe[start[i][0]][start[i][1]] = true;
-			// System.out.println("q added start : " + q.peek());
 		}
 		
-
-		while (!q.isEmpty()) {
-			// System.out.println("inside loop");
-			int n = q.size();
-			int[][] everyDay = new int[n][2];
-			for (int i = 0; i < n; i++) {
-				int[] cur = q.poll();
-				everyDay[i][0] = cur[0];
-				everyDay[i][1] = cur[1];
-			}
-			// System.out.println("one day passed : " + q.isEmpty());
-			days++;
-			for (int i = 0; i < n; i++) {
-				int x = everyDay[i][0];
-				int y = everyDay[i][1];
-				for (int d = 0; d < 4; d++) {
-					int nx = x + dx[d];
-					int ny = y + dy[d];
-
-					if (nx >= 0 && nx < N && ny >= 0 && ny < M && !ripe[nx][ny] && box[nx][ny] != -1) {
-						ripe[nx][ny] = true;
-						box[nx][ny] = 1;
-						q.offer(new int[] { nx, ny });
-						// System.out.println("q children added : " + q.peek());
-					}
+		int days = -1;
+		
+		while(!tomato.isEmpty()) {
+			int[] cur = tomato.poll();
+			days = cur[0];
+			int x = cur[1];
+			int y = cur[2];
+			
+			for (int d = 0; d < 4; d++) {
+				int nx = x + dx[d];
+				int ny = y + dy[d];
+				
+				if(inRange(nx, ny)) {
+					box[nx][ny] = 1;
+					tomato.add(new int[] {days+1, nx, ny});
 				}
+					
 			}
-			
-//			for(int[] a : box)
-//				System.out.println(Arrays.toString(a));
-			
-			
-//			for (int i = 0; i < N; i++) {
-//				for (int j = 0; j < M; j++) {
-//					if(ripe[i][j] && box[i][j] > -1) {
-//						box[i][j]++;
-//					}
-//				}
-//			}
 		}
+		for (int i = 0; i < N; i++)
+			for (int j = 0; j < M; j++)
+				if(box[i][j] == 0)
+					days = -1;
 
+		System.out.println(days);
+	}
+
+	private static boolean inRange(int x, int y) {
+		return x >= 0 && x < N && y >= 0 && y < M && box[x][y] == 0;
 	}
 
 }
