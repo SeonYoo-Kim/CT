@@ -6,49 +6,52 @@ import java.util.StringTokenizer;
 
 public class Solution {
 
-	static int B, N, heights[], min;
+	private static int heights[], diff, tower, B, N;
 	static boolean[] selected;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
 		int T = Integer.parseInt(br.readLine());
-
+		
 		for (int tc = 1; tc <= T; tc++) {
-			st = new StringTokenizer(br.readLine());
+			StringTokenizer st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
 			B = Integer.parseInt(st.nextToken());
-			min = Integer.MAX_VALUE;
+			
 			heights = new int[N];
 			selected = new boolean[N];
-
 			st = new StringTokenizer(br.readLine());
-			for (int i = 0; i < N; i++) {
-				heights[i] = Integer.parseInt(st.nextToken());
-			}
-
-			System.out.println("#" + tc + " " + subSet(0, 0));
+			for (int i = 0; i < N; i++) 
+				heights[i] = Integer.parseInt(st.nextToken()); 
+			
+			tower = Integer.MAX_VALUE;
+			diff = Integer.MAX_VALUE;
+			subset(-1, 0);
+			
+			
+			System.out.println("#" + tc + " " + diff);
 		}
+
 	}
 
-	private static int subSet(int sum, int idx) {
-		if (sum >= B) {
-			if (sum - B < min) {
-				min = sum - B;
-				// System.out.println("min : " + min + ", sum : " + sum + ", B : " + B);
-			}
-			return min;
+	private static void subset(int idx, int height) {
+		//System.out.println(idx + " " + height);
+		
+		if(height > tower) return;
+		if(diff == 0) return;
+		
+		if(height >= B) {
+			tower = height;
+			diff = tower - B;
+			// System.out.println(tower + " " + diff);
 		}
-		if (idx >= N) return min;
-		if ( selected[idx])
-			return min;
-
-		selected[idx] = true;
-		subSet(sum + heights[idx], idx + 1);
-		selected[idx] = false;
-		subSet(sum, idx + 1);
-
-		return min;
+		
+		if(idx + 1 < N) {
+			selected[idx+1] = true;
+			subset(idx + 1, height + heights[idx+1]);
+			selected[idx+1] = false;
+			subset(idx + 1, height);
+		}
 	}
 
 }
