@@ -2,55 +2,51 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
+import java.util.StringTokenizer;
 
-public class Solution{
+public class Solution {
 
-	static boolean[] selected;
-	static int kindOf, maxCal, score[], cal[], maxScore;
+	static int L, info[][], max, N;
+	static boolean selected[];
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
-		StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
-		st.nextToken();
-		int T = (int) st.nval;
-
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
-			st.nextToken();
-			kindOf = (int) st.nval;
-			st.nextToken();
-			maxCal = (int) st.nval;
-			score = new int[kindOf];
-			cal = new int[kindOf];
-			selected = new boolean[kindOf];
-			maxScore = 0;
-			for (int i = 0; i < kindOf; i++) {
-				st.nextToken();
-				score[i] = (int) st.nval;
-				st.nextToken();
-				cal[i] = (int) st.nval;
+
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			L = Integer.parseInt(st.nextToken());
+			info = new int[N][2]; // score, calrory
+			selected = new boolean[N];
+			max = 0;
+			
+			for (int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine());
+				info[i][0] = Integer.parseInt(st.nextToken());
+				info[i][1] = Integer.parseInt(st.nextToken());
 			}
 
-			subset(0, 0, 0);
-			System.out.println("#" + tc + " " + maxScore);
+			
+			subSet(-1, 0, 0);
+
+			System.out.println("#" + tc + " " + max);
 		}
+
 	}
 
-	private static void subset(int idx, int calSum, int scoreSum) {
-
-		if (calSum > maxCal)
-			return;
-		if (scoreSum > maxScore) {
-			// System.out.println("max changed : " + maxScore);
-			maxScore = scoreSum;
-			// System.out.println(maxScore);
-
+	private static void subSet(int idx, int score, int calory) {
+		
+		if(calory > L) return;
+		
+		if(score > max)
+			max = score;
+		
+		if(idx < N - 1) {
+			selected[idx + 1] = true;
+			subSet(idx + 1, score + info[idx + 1][0], calory + info[idx + 1][1]);
+			selected[idx + 1] = false;
+			subSet(idx + 1, score, calory);
 		}
-		if (idx >= kindOf)
-			return;
-		selected[idx] = true;
-		subset(idx + 1, calSum + cal[idx], scoreSum + score[idx]);
-		selected[idx] = false;
-		subset(idx + 1, calSum, scoreSum);
-
 	}
 }
