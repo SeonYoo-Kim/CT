@@ -1,40 +1,36 @@
-
-import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main{
-
 	static boolean selected[];
-	static int M, N, arr[];
-	static List<int[]> list;
-
+	static int N, M, per[];
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		N = sc.nextInt();
 		M = sc.nextInt();
-		StringBuilder sb = new StringBuilder();
 		selected = new boolean[N];
-		arr = new int[M];
-		comb(0, sb);
-
-		System.out.println(sb);
+		per = new int[M];
+		dfs(0);
+		sc.close();
 	}
-
-	private static void comb(int cnt, StringBuilder sb) {
-		if (cnt == M) {
-			for (int i = 0; i < M; i++)
-				sb.append(arr[i]).append(" ");
-			sb.append("\n");
+	private static void dfs(int cnt) {
+		
+		if(cnt == M) {
+			for(int a : per)
+				System.out.print(a + " ");
+			System.out.println();
 			return;
 		}
-
+		
 		for (int i = 0; i < N; i++) {
-			if (!selected[i]) {
-				selected[i] = true;
-				arr[cnt] = i + 1;
-				comb(cnt + 1, sb);
-				selected[i] = false;
-			}
+			if(selected[i]) continue;
+			selected[i] = true;
+			per[cnt] = i + 1;
+			dfs(cnt + 1);
+			selected[i] = false;
 		}
+		
+		
 	}
+
 }
