@@ -4,34 +4,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Solution {
+public class Solution{
 
-	static int N, room[][], max, argMax;
-	static int[] dx = { 0, 0, 1, -1 };
-	static int[] dy = { 1, -1, 0, 0 };
-
+	static int[] dx = {0, 0, 1, -1};
+	static int[] dy = {1, -1, 0, 0};
+	static int room[][], N;
 	public static void main(String[] args) throws NumberFormatException, IOException {
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
 			N = Integer.parseInt(br.readLine());
 			room = new int[N][N];
-
 			for (int i = 0; i < N; i++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
 				for (int j = 0; j < N; j++)
 					room[i][j] = Integer.parseInt(st.nextToken());
 			}
-			max = 0;
-			argMax = N * N;
-			for (int i = N - 1; i >= 0; i--) {
-				for (int j = N - 1; j >= 0; j--) {
+			int max = 0;
+			int argMax = -1;
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
 					int len = dfs(i, j);
-					if (len > max) {
+					if(len > max) {
 						max = len;
 						argMax = room[i][j];
 					}else if(len == max) {
-						argMax = Math.min(room[i][j], argMax);
+						argMax = Math.min(argMax, room[i][j]);
 					}
 				}
 			}
@@ -44,9 +43,9 @@ public class Solution {
 		for (int d = 0; d < 4; d++) {
 			int nx = x + dx[d];
 			int ny = y + dy[d];
-
-			if (inRange(nx, ny) && room[x][y] + 1 == room[nx][ny])
+			if(inRange(nx, ny) && room[x][y] + 1 == room[nx][ny]) {
 				len = 1 + dfs(nx, ny);
+			}
 		}
 		return len;
 	}
