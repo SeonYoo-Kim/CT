@@ -1,80 +1,73 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Solution {
-	static int[][] cheese;
-	static boolean[][] eaten;
+
 	static int[] dx = { 0, 0, 1, -1 };
 	static int[] dy = { 1, -1, 0, 0 };
-	static int N;
+	static int N, cheese[][];
+	static boolean[][] visited;
 
-	public static void main(String[] args) throws IOException {
-		StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
-		st.nextToken();
-		int T = (int) st.nval;
-
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
-			st.nextToken();
-			N = (int) st.nval;
+			N = Integer.parseInt(br.readLine());
 			cheese = new int[N][N];
-
-			int max = 0;
+			int maxDay = 0;
 			for (int i = 0; i < N; i++) {
+				StringTokenizer st = new StringTokenizer(br.readLine());
 				for (int j = 0; j < N; j++) {
-					st.nextToken();
-					cheese[i][j] = (int) st.nval;
-					if (cheese[i][j] > max)
-						max = cheese[i][j];
+					cheese[i][j] = Integer.parseInt(st.nextToken());
+					if (cheese[i][j] > maxDay)
+						maxDay = cheese[i][j];
 				}
 			}
-//			for(int[]a : map)
-//				System.out.println(Arrays.toString(a));
-//			System.out.println(max);
-
-			int maxChunk = 0;
-
-			for (int i = 0; i < max; i++) {
-				int chunk = 0;
-				eaten = new boolean[N][N];
-
-				for (int j = 0; j < N; j++) {
-					for (int k = 0; k < N; k++) {
-						if (cheese[j][k] <= i)
-							eaten[j][k] = true;
+			int max = 0;
+			for (int day = 0; day <= maxDay; day++) {
+				visited = new boolean[N][N];
+				boolean[][] newCheese = new boolean[N][N];
+				for (boolean[] a : newCheese)
+					Arrays.fill(a, true);
+				for (int i = 0; i < N; i++) {
+					for (int j = 0; j < N; j++) {
+						if (cheese[i][j] <= day)
+							newCheese[i][j] = false;
 					}
 				}
-
-				// 덩어리 세야함
-				for (int j = 0; j < N; j++) {
-					for (int k = 0; k < N; k++) {
-						chunk += search(j, k, 0);
+				int chunks = 0;
+				for (int i = 0; i < N; i++) {
+					for (int j = 0; j < N; j++) {
+						if(visited[i][j] || !newCheese[i][j]) continue;
+						dfs(i, j, newCheese);
+						chunks++;
 					}
 				}
-				if (chunk > maxChunk)
-					maxChunk = chunk;
+				if (chunks > max)
+					max = chunks;
 			}
-			System.out.println("#" + tc + " " + maxChunk);
+			System.out.println("#" + tc + " " + max);
 		}
 	}
 
-	static int search(int x, int y, int cnt) {
-		if (eaten[x][y]) return 0;
-		eaten[x][y] = true;
+	private static void dfs(int x, int y, boolean[][] cheese) {
+		if (visited[x][y])
+			return;
+		visited[x][y] = true;
+
 		for (int d = 0; d < 4; d++) {
 			int nx = x + dx[d];
 			int ny = y + dy[d];
-
-			if (nx >= 0 && nx < N && ny >= 0 && ny < N) {
-				if (!eaten[nx][ny]) {
-					search(nx, ny, cnt);
-				}
-			}
+			if (inRange(nx, ny) && cheese[x][y])
+				dfs(nx, ny, cheese);
 		}
-		cnt++;
-		return cnt;
 	}
+
+	private static boolean inRange(int x, int y) {
+		return x >= 0 && x < N && y >= 0 && y < N;
+	}
+
 }
