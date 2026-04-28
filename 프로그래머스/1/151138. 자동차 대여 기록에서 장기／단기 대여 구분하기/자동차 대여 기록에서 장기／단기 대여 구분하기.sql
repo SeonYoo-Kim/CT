@@ -1,0 +1,6 @@
+-- 코드를 입력하세요
+SELECT *, if(TIMESTAMPDIFF(DAY, START_DATE, END_DATE) >=29 , '장기 대여' , '단기 대여') RENT_TYPE
+-- SELECT *, TIMESTAMPDIFF(DAY, START_DATE, END_DATE) 대여기간,
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY 
+where month(START_DATE)=09 and year(START_DATE)=2022
+order by HISTORY_ID desc;
