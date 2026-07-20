@@ -22,7 +22,8 @@ public class Main {
         for (int i = 0; i < m2; i++) 
             day2 += months[i];
         
-        int idx = ((day2-day1) % 7 + 7) % 7;
+        //int idx = ((day2-day1) % 7 + 7) % 7;
+        int idx = Math.floorMod(day2 - day1, 7);
         System.out.println(days[idx]);
 
     }
