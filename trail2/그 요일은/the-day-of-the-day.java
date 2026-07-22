@@ -15,13 +15,11 @@ public class Main {
         String when = br.readLine();
         
         String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-        int[] cnt = {0, 0, 0, 0, 0, 0, 0};
         int[] months = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        int idx = 0, asw = 0;
+        int idx = 0;
         for (int i = 0; i < days.length; i++) {
             if(days[i].equals(when)) {
-                //idx = i;
-                asw = i;
+                idx = i;
             }
         }        
         
@@ -34,15 +32,11 @@ public class Main {
         }
         int total = day2 - day1;
         
-        do {
-            cnt[idx++]++;
-            
-            idx = idx%7;
-        }
-        while(total-- > 0);
+        int asw = total / 7;
+        int offset = total % 7;
+        if(idx <= offset) asw++;
         
-        
-        System.out.println(cnt[asw]);
+        System.out.println(asw);
         
     }
 }
